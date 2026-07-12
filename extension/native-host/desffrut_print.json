@@ -1,0 +1,9 @@
+{
+  "name": "desffrut_print_host",
+  "description": "Desffrut Hardware - Host nativo para impressao local (cupom ESC/POS, etiqueta ZPL, inkjet)",
+  "path": "C:\\desffrut\\native-host\\desffrut_print.exe",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://SUBSTITUA_PELO_ID_DA_EXTENSAO_CHROME/"
+  ]
+}

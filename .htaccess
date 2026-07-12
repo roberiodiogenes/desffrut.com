@@ -1,0 +1,108 @@
+Options -Indexes
+Options -MultiViews
+
+RewriteEngine On
+
+# ─── RewriteBase — NÃO definido intencionalmente ──────────────────────────────
+# Em contexto per-directory (.htaccess), o Apache já strippa automaticamente
+# o prefixo do subdiretório antes de aplicar as regras. Isso faz o arquivo
+# funcionar sem alteração tanto no XAMPP (/desffrut.com/) quanto na
+# HostGator (raiz do domínio). Nenhuma edição manual necessária no deploy.
+
+# ─── HTTPS — descomente apenas em produção (HostGator) ────────────────────────
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ─── Proteção: bloquear acesso direto a diretórios internos ───────────────────
+RewriteRule ^(app|briefings|database)(\/|$) - [F,L]
+
+# ─── Proteção: bloquear download de arquivos sensíveis ────────────────────────
+<FilesMatch "\.(md|sql|gz|sh|log|credentials\.php)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# ─── Uploads: desabilitar execução de PHP nos arquivos enviados ───────────────
+<IfModule mod_php.c>
+    <FilesMatch "^uploads\/.*\.php$">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+</IfModule>
+
+# ─── Permitir acesso direto a arquivos e pastas que já existem ────────────────
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# ─── API REST: todas as rotas /api/* vão para o roteador ──────────────────────
+RewriteRule ^api/(.*)$ api/index.php [QSA,L]
+
+# ─── Clean URLs das views por role ────────────────────────────────────────────
+RewriteRule ^dashboard/?$                   views/dashboard/index.php [L]
+RewriteRule ^dashboard/fragmento/?$         views/dashboard/fragmento.php [QSA,L]
+
+RewriteRule ^login/?$                   login.php [L]
+RewriteRule ^logout/?$                  logout.php [L]
+RewriteRule ^cadastro/?$                cadastro.php [L]
+RewriteRule ^privacidade/?$             privacidade.php [L]
+
+RewriteRule ^meu-perfil/?$              views/cliente/perfil.php [L]
+RewriteRule ^checkout/?$                views/checkout/index.php [L]
+RewriteRule ^pedidos/(\d+)/status/?$    views/cliente/pedido_status.php?pedido_id=$1 [QSA,L]
+
+RewriteRule ^pdv/?$                     views/pdv/index.php [L]
+RewriteRule ^pdv/abertura/?$            views/pdv/abertura.php [L]
+RewriteRule ^pdv/sangria/?$             views/pdv/sangria.php [L]
+
+RewriteRule ^mobile/entregas/?$         views/entregador/entregas.php [L]
+
+RewriteRule ^financeiro/dashboard/?$    views/financeiro/dashboard.php [L]
+RewriteRule ^financeiro/contas/?$       views/financeiro/contas.php [L]
+RewriteRule ^financeiro/rh/?$           views/financeiro/rh.php [L]
+
+RewriteRule ^gerencia/dashboard/?$                  views/gerencia/dashboard.php [L]
+RewriteRule ^gerencia/produtos/?$                   views/gerencia/produtos.php [L]
+RewriteRule ^gerencia/estoque/?$                    views/gerencia/estoque.php [L]
+RewriteRule ^gerencia/despacho/?$                   views/gerencia/despacho.php [L]
+RewriteRule ^gerencia/relatorios/?$                 views/gerencia/relatorios.php [L]
+RewriteRule ^gerencia/relatorio-estoque-critico/?$  views/gerencia/relatorio-estoque-critico.php [L]
+RewriteRule ^gerencia/etiquetas/?$                  views/gerencia/etiquetas.php [L]
+
+RewriteRule ^rh/ficha/(\d+)/?$          views/rh/ficha.php?funcionario_id=$1 [QSA,L]
+RewriteRule ^rh/cracha/(\d+)/?$         views/rh/cracha.php?funcionario_id=$1 [QSA,L]
+
+RewriteRule ^admin/dashboard/?$         views/admin/dashboard.php [L]
+RewriteRule ^admin/lojas/?$             views/admin/lojas.php [L]
+RewriteRule ^admin/usuarios/?$          views/admin/usuarios.php [L]
+RewriteRule ^admin/auditoria/?$         views/admin/auditoria.php [L]
+
+# ─── Dev Mode — rota oculta, apenas dev_admin (Fase 9) ───────────────────────
+RewriteRule ^dev/?$                     views/dev/index.php [L]
+
+# ─── Parcerias — formulário público B2B (Fase 10) ────────────────────────────
+RewriteRule ^parcerias/?$               views/parcerias/index.php [L]
+
+# ─── Pedidos: validação de token WhatsApp (Fase 11) ──────────────────────────
+RewriteRule ^pedidos/validar/([a-f0-9\-]+)/?$ views/pedidos/validar.php?token=$1 [QSA,L]
+
+# ─── Programa de Indicação — link curto (Fase 12) ────────────────────────────
+RewriteRule ^i/([A-Za-z0-9]+)/?$              index.php?ref=$1 [QSA,L]
+
+# ─── Páginas públicas complementares (Cat. 15) ───────────────────────────────
+RewriteRule ^termos/?$                        termos.php [L]
+RewriteRule ^lojas/?$                         views/public/lojas.php [L]
+RewriteRule ^sobre/?$                         views/public/sobre.php [L]
+RewriteRule ^fidelidade/?$                    views/public/fidelidade.php [L]
+RewriteRule ^manutencao/?$                    views/manutencao.php [L]
+RewriteRule ^manual/?$                        views/manual/index.php [L]
+RewriteRule ^sitemap\.xml$                    sitemap.php [L]
+
+# ─── Catch-all: qualquer rota não mapeada → 404 personalizada ────────────────
+# Funciona em XAMPP (subdiretório) e HostGator (raiz). Deve ser o ÚLTIMO bloco.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^.*$ views/errors/404.php [L]
+
+# ─── Erros personalizados via Apache (produção / HostGator) ──────────────────
+ErrorDocument 404 /404.php

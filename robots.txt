@@ -1,0 +1,38 @@
+User-agent: *
+
+# Bloquear áreas internas e administrativas
+Disallow: /dashboard
+Disallow: /pdv
+Disallow: /pdv/abertura
+Disallow: /pdv/sangria
+Disallow: /api/
+Disallow: /dev
+Disallow: /admin/
+Disallow: /gerencia/
+Disallow: /financeiro/
+Disallow: /mobile/
+Disallow: /app/
+Disallow: /briefings/
+Disallow: /database/
+Disallow: /uploads/backups/
+Disallow: /meu-perfil
+Disallow: /checkout
+Disallow: /login
+Disallow: /logout
+Disallow: /cadastro
+Disallow: /manutencao
+
+# Não indexar o manual da equipe
+Disallow: /manual
+
+# Permitir explicitamente as páginas públicas indexáveis
+Allow: /$
+Allow: /lojas
+Allow: /sobre
+Allow: /fidelidade
+Allow: /parcerias
+Allow: /termos
+Allow: /privacidade
+
+# Sitemap
+Sitemap: https://desffrut.com.br/sitemap.xml

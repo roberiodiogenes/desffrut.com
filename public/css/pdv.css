@@ -1,0 +1,354 @@
+/* ============================================================
+   Desffrut — PDV: Redesign Categoria 21
+   Split 60/40 | Cards com foto | Chips de categoria
+   Indicador offline âmbar | Modal pagamento 3 passos
+   ============================================================ */
+
+/* ── Reset / Body ─────────────────────────────────────────── */
+.pdv-body {
+    margin: 0; padding: 0;
+    height: 100vh; overflow: hidden;
+    display: flex; flex-direction: column;
+    background: #0d1117;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #e2e8f0; font-size: .9rem; user-select: none;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.pdv-header {
+    height: 48px; background: #1b5e20;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; flex-shrink: 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,.5);
+}
+.pdv-brand  { font-weight: 700; font-size: 1rem; color: #fff; }
+.pdv-sep    { color: rgba(255,255,255,.3); margin: 0 8px; }
+.pdv-turno  { font-size: .82rem; color: rgba(255,255,255,.8); }
+.pdv-header-right { display: flex; align-items: center; gap: 6px; }
+.pdv-clock { font-size: .72rem; color: rgba(255,255,255,.45); margin-right: 4px; }
+
+/* ── Indicador Online / Offline ────────────────────────────── */
+#pdv-status-online         { transition: background .4s, color .4s; }
+#pdv-status-online.offline { background: #e65100 !important; animation: pdv-pulso 1.8s ease-in-out infinite; }
+@keyframes pdv-pulso { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+/* ── Layout principal 60/40 ───────────────────────────────── */
+.pdv-main { flex: 1; display: flex; overflow: hidden; }
+
+/* ── Coluna esquerda (60%) ────────────────────────────────── */
+.pdv-left {
+    width: 60%; flex-shrink: 0;
+    background: #111820;
+    border-right: 1px solid #1e2530;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+}
+
+/* ── Barra de busca + cliente ─────────────────────────────── */
+.pdv-search-area {
+    padding: 12px 14px 0;
+    flex-shrink: 0;
+    background: #0d1117;
+    border-bottom: 1px solid #1e2530;
+}
+.pdv-label {
+    display: block; font-size: .72rem; font-weight: 600;
+    color: #8b949e; text-transform: uppercase;
+    letter-spacing: .4px; margin-bottom: 4px;
+}
+.pdv-busca-wrap { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+.pdv-input-busca {
+    flex: 1; background: #161b22;
+    border: 1px solid #30363d; border-radius: 8px;
+    color: #e2e8f0; padding: 10px 14px;
+    font-size: 1rem; outline: none; transition: border-color .15s;
+}
+.pdv-input-busca:focus { border-color: #2ea043; box-shadow: 0 0 0 2px rgba(46,160,67,.2); }
+.pdv-btn-cam {
+    flex-shrink: 0; background: #21262d; border: 1px solid #30363d;
+    border-radius: 8px; color: #e2e8f0; font-size: 1.15rem; padding: 7px 11px;
+    cursor: pointer; transition: background .15s, border-color .15s; line-height: 1;
+}
+.pdv-btn-cam:hover { background: #2ea043; border-color: #2ea043; }
+
+/* Dropdown de busca */
+.pdv-search-box { position: relative; }
+.pdv-lista-prod {
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 200;
+    background: #1c2230; border: 1px solid #30363d; border-radius: 8px;
+    max-height: 220px; overflow-y: auto;
+    box-shadow: 0 12px 30px rgba(0,0,0,.6); margin-top: 4px;
+}
+.pdv-lista-prod .list-group-item {
+    background: #1c2230; border-color: #21262d;
+    color: #e2e8f0; font-size: .84rem; cursor: pointer;
+    border-left: 3px solid transparent; transition: background .1s, border-color .1s; padding: 9px 12px;
+}
+.pdv-lista-prod .list-group-item:hover {
+    background: #1a2f1c; border-left-color: #2ea043; color: #fff;
+}
+
+/* ── CPF cliente ──────────────────────────────────────────── */
+.pdv-cliente-inline {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px; background: #0d1117;
+    border-bottom: 1px solid #1e2530; flex-shrink: 0;
+}
+.pdv-cliente-inline input {
+    flex: 1; background: #161b22; border: 1px solid #30363d;
+    border-radius: 6px; color: #e2e8f0; padding: 5px 10px; font-size: .84rem; outline: none;
+}
+.pdv-cliente-inline input:focus { border-color: #2ea043; }
+.pdv-cliente-inline button {
+    background: #21262d; border: 1px solid #30363d; border-radius: 6px;
+    color: #8b949e; font-size: .8rem; padding: 5px 10px; cursor: pointer; white-space: nowrap;
+}
+.pdv-cliente-inline button:hover { background: #30363d; color: #fff; }
+#pdv-cliente-info { font-size: .78rem; color: #8b949e; flex-shrink: 0; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Produto atual ─────────────────────────────────────────── */
+.pdv-produto-atual-wrap { flex-shrink: 0; background: #0d1117; border-bottom: 1px solid #1e2530; }
+.pdv-produto-atual {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px 12px;
+}
+.pdv-produto-atual-vazio { font-size: .78rem; color: #484f58; padding: 4px 0; }
+.pdv-produto-atual-foto,
+.pdv-produto-atual-placeholder {
+    width: 48px; height: 48px; flex-shrink: 0; border-radius: 8px;
+    object-fit: cover; background: #1e2530;
+}
+.pdv-produto-atual-placeholder {
+    display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #30363d;
+}
+.pdv-produto-atual-info { min-width: 0; flex: 1; }
+.pdv-produto-atual-nome {
+    font-size: .92rem; font-weight: 700; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pdv-produto-atual-cod { font-size: .7rem; color: #8b949e; margin-bottom: 3px; }
+.pdv-produto-atual-linha { display: flex; gap: 12px; font-size: .74rem; color: #8b949e; }
+.pdv-produto-atual-linha strong { color: #e2e8f0; }
+
+/* ── Chips de categoria ───────────────────────────────────── */
+.pdv-cats {
+    display: flex; gap: 8px; padding: 10px 14px;
+    overflow-x: auto; flex-shrink: 0;
+    border-bottom: 1px solid #1e2530;
+    background: #0f1520;
+    scrollbar-width: thin; scrollbar-color: #30363d transparent;
+}
+.pdv-cat-chip {
+    flex-shrink: 0; background: #21262d; border: 1px solid #30363d;
+    border-radius: 20px; padding: 4px 14px; font-size: .78rem;
+    color: #8b949e; cursor: pointer; transition: all .15s;
+    white-space: nowrap;
+}
+.pdv-cat-chip:hover           { background: #1a2f1c; border-color: #2ea043; color: #2ea043; }
+.pdv-cat-chip.ativo           { background: #1b5e20; border-color: #2ea043; color: #fff; font-weight: 600; }
+
+/* ── Grid de cards de produto ─────────────────────────────── */
+.pdv-prod-grid {
+    flex: 1; overflow-y: auto; padding: 12px 14px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+    gap: 8px; align-content: start;
+}
+.pdv-prod-card {
+    background: #161b22; border: 1px solid #21262d; border-radius: 10px;
+    cursor: pointer; overflow: hidden; transition: transform .12s, border-color .12s, box-shadow .12s;
+    display: flex; flex-direction: column;
+}
+.pdv-prod-card:hover {
+    transform: translateY(-2px); border-color: #2ea043;
+    box-shadow: 0 6px 18px rgba(46,160,67,.2);
+}
+.pdv-prod-card:active { transform: scale(.97); }
+.pdv-prod-foto {
+    width: 100%; aspect-ratio: 1/1; object-fit: cover;
+    background: #1e2530; flex-shrink: 0;
+}
+.pdv-prod-foto-placeholder {
+    width: 100%; aspect-ratio: 1/1;
+    background: linear-gradient(135deg,#1e2530,#161b22);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; color: #30363d;
+}
+.pdv-prod-info { padding: 8px 8px 10px; flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.pdv-prod-nome { font-size: .78rem; font-weight: 600; color: #e2e8f0; line-height: 1.2;
+                 max-height: 2.5em; overflow: hidden; }
+.pdv-prod-preco { font-size: .95rem; font-weight: 800; color: #2ea043; }
+.pdv-prod-unidade { font-size: .68rem; color: #8b949e; }
+.pdv-prod-card.sem-estoque { opacity: .45; pointer-events: none; }
+
+/* Animação "adicionado!" */
+@keyframes pdv-flash-card {
+    0%   { box-shadow: 0 0 0 0 rgba(46,160,67,.8); border-color: #2ea043; }
+    50%  { box-shadow: 0 0 0 10px rgba(46,160,67,.1); }
+    100% { box-shadow: 0 0 0 0 rgba(46,160,67,0); border-color: #21262d; }
+}
+.pdv-prod-card.flash { animation: pdv-flash-card .5s ease; }
+
+/* ── Coluna direita: carrinho (40%) ───────────────────────── */
+.pdv-right {
+    flex: 1; display: flex; flex-direction: column;
+    background: #0d1117; overflow: hidden;
+}
+
+.pdv-carrinho-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; border-bottom: 1px solid #1e2530;
+    background: #161b22; flex-shrink: 0; font-weight: 700; font-size: .88rem;
+}
+
+.pdv-table-wrap { flex: 1; overflow-y: auto; }
+.pdv-tabela { color: #e2e8f0; margin: 0; }
+.pdv-tabela thead th {
+    background: #161b22; color: #8b949e; font-size: .73rem;
+    text-transform: uppercase; letter-spacing: .3px;
+    border-color: #1e2530; position: sticky; top: 0; z-index: 2;
+}
+.pdv-tabela tbody td { border-color: #1e2530; vertical-align: middle; font-size: .82rem; padding: 8px 10px; }
+.pdv-tabela tbody tr:hover td {
+    background: #1a2f1c !important; color: #e2e8f0 !important; border-color: #2ea043 !important;
+}
+.pdv-tabela tbody tr:hover td:first-child { border-left: 3px solid #2ea043 !important; }
+.pdv-col-nome { max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pdv-qty-input {
+    background: #161b22; border: 1px solid #30363d; border-radius: 4px;
+    color: #e2e8f0; padding: 3px 6px; width: 70px; text-align: center;
+}
+
+/* Atalhos */
+.pdv-atalhos-bar {
+    padding: 6px 14px; display: flex; flex-wrap: wrap; gap: 6px;
+    border-top: 1px solid #1e2530; background: #0d1117; flex-shrink: 0;
+}
+.pdv-atalho { font-size: .68rem; color: #8b949e; display: flex; align-items: center; gap: 3px; }
+.pdv-atalho kbd {
+    background: #21262d; border: 1px solid #30363d; border-radius: 4px;
+    padding: 1px 5px; font-size: .68rem; color: #c9d1d9;
+}
+
+/* Totais */
+.pdv-totais { padding: 10px 14px; border-top: 1px solid #1e2530; background: #161b22; flex-shrink: 0; }
+.pdv-total-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 3px 0; font-size: .83rem; color: #8b949e;
+}
+.pdv-total-liquido {
+    font-size: 1.4rem !important; font-weight: 800 !important;
+    color: #2ea043 !important; padding-top: 8px !important;
+    margin-top: 4px; border-top: 1px solid #1e2530;
+}
+.pdv-btn-finalizar {
+    border-radius: 0; padding: 18px; font-size: 1.1rem; font-weight: 800;
+    flex-shrink: 0; background: #2ea043; border: none; letter-spacing: .4px;
+}
+.pdv-btn-finalizar:hover { background: #238636; }
+
+/* Alerta toast */
+.pdv-alerta-toast {
+    position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
+    background: #2ea043; color: #fff; border-radius: 8px;
+    padding: 10px 20px; font-size: .88rem; font-weight: 600; z-index: 500;
+    box-shadow: 0 4px 16px rgba(0,0,0,.5);
+    animation: pdv-slide-down .2s ease;
+}
+@keyframes pdv-slide-down { from { top: 40px; opacity: 0; } to { top: 60px; opacity: 1; } }
+
+/* ── Modais ─────────────────────────────────────────────────── */
+.pdv-modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.75);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; backdrop-filter: blur(3px);
+}
+.pdv-modal-box {
+    background: #161b22; border: 1px solid #30363d; border-radius: 14px;
+    padding: 28px; width: 100%; max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.7); color: #e2e8f0;
+}
+.pdv-modal-box .form-control,
+.pdv-modal-box .form-select,
+.pdv-modal-box .input-group-text { background: #0d1117; border-color: #30363d; color: #e2e8f0; }
+.pdv-modal-box .form-label { color: #c9d1d9; }
+.pdv-modal-box .form-text  { color: #8b949e; }
+
+/* ── Painel de pagamento — sempre visível na coluna direita ──────────── */
+.pdv-pag-total-box {
+    text-align: center; background: #111820; flex-shrink: 0;
+    padding: 12px 14px; border-bottom: 1px solid #1e2530;
+}
+.pdv-pag-total-box .text-muted { font-size: .76rem; color: #8b949e !important; }
+.pdv-pag-total-valor { font-size: 2rem; font-weight: 800; color: #2ea043; line-height: 1.2; }
+
+.pdv-forma-pagamento { flex-shrink: 0; padding: 10px 14px 4px; border-bottom: 1px solid #1e2530; }
+.pdv-forma-btns { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 4px; }
+.pdv-forma-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    background: #161b22; border: 1px solid #30363d; border-radius: 6px;
+    color: #8b949e; font-size: 1rem; padding: 6px 2px; cursor: pointer;
+    transition: background .12s, border-color .12s, color .12s;
+}
+.pdv-forma-btn span { font-size: .62rem; }
+.pdv-forma-btn:hover { border-color: #2ea043; color: #e2e8f0; }
+.pdv-forma-btn.ativo { background: #0d2818; border-color: #2ea043; color: #2ea043; }
+
+.pdv-recebido-troco {
+    flex-shrink: 0; display: flex; gap: 10px;
+    padding: 10px 14px; border-bottom: 1px solid #1e2530;
+}
+.pdv-recebido-campo { flex: 1.3; }
+.pdv-troco-campo { flex: 1; }
+.pdv-input-recebido {
+    width: 100%; background: #161b22; border: 1px solid #30363d; border-radius: 6px;
+    color: #fff; padding: 7px 10px; font-size: .95rem; font-weight: 600; outline: none;
+}
+.pdv-input-recebido:focus { border-color: #2ea043; }
+.pdv-input-recebido[readonly] { color: #8b949e; background: #12161d; }
+.pdv-troco-valor {
+    background: #0d2818; border: 1px solid #1d4a2c; border-radius: 6px;
+    color: #2ea043; padding: 7px 10px; font-size: .95rem; font-weight: 700;
+}
+
+/* Botões rápidos de valor */
+.pdv-pag-quick { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+.pdv-pag-quick button {
+    background: #21262d; border: 1px solid #30363d; border-radius: 6px;
+    color: #c9d1d9; padding: 3px 9px; font-size: .72rem; cursor: pointer;
+    transition: background .1s;
+}
+.pdv-pag-quick button:hover { background: #1b5e20; border-color: #2ea043; color: #fff; }
+
+/* ── Scanner ─────────────────────────────────────────────── */
+.pdv-scanner-wrap {
+    position: relative; background: #000; border-radius: 8px;
+    overflow: hidden; min-height: 200px;
+}
+.pdv-scanner-video { width: 100%; max-height: 280px; object-fit: cover; display: block; }
+.pdv-scanner-linha {
+    position: absolute; left: 8%; right: 8%; height: 2px;
+    background: linear-gradient(90deg, transparent, #2ea043, transparent);
+    box-shadow: 0 0 8px rgba(46,160,67,.8);
+    animation: pdv-scan-sweep 1.8s ease-in-out infinite; pointer-events: none;
+}
+@keyframes pdv-scan-sweep { 0%,100%{top:15%} 50%{top:83%} }
+
+/* ── Sem caixa aberto ──────────────────────────────────────── */
+.pdv-sem-caixa {
+    display: flex; align-items: center; justify-content: center;
+    height: 100vh; background: #0d1117; color: #e2e8f0;
+}
+
+/* ── Preview cupom ─────────────────────────────────────────── */
+.pdv-cupom {
+    font-size: .68rem; font-family: 'Courier New', monospace;
+    background: #f8f8f8; color: #111; border-radius: 6px;
+    padding: 10px; white-space: pre; max-height: 180px; overflow-y: auto;
+}
+
+/* ── Scrollbars ────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #0d1117; }
+::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #484f58; }

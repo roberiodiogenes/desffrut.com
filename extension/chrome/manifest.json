@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Desffrut Hardware",
+  "version": "2.0.0",
+  "description": "Ponte entre o sistema Desffrut e impressoras locais via Native Messaging. Suporta cupom (ESC/POS), etiqueta (ZPL - Tomate MKV-006) e jato de tinta.",
+
+  "permissions": [
+    "nativeMessaging"
+  ],
+
+  "host_permissions": [
+    "https://desffrut.com.br/*",
+    "https://*.desffrut.com.br/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://desffrut.com.br/*",
+        "https://*.desffrut.com.br/*",
+        "http://localhost/*",
+        "http://127.0.0.1/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Desffrut Hardware"
+  }
+}

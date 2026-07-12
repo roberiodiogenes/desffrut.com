@@ -1,0 +1,192 @@
+/* ================================================================
+   Desffrut — Estilos Globais + Catálogo
+   Bootstrap 5 já é carregado antes; este arquivo só sobrepõe e
+   adiciona componentes customizados.
+   ================================================================ */
+
+:root {
+    --verde:      #2e7d32;
+    --verde-escuro: #1b5e20;
+    --amarelo:    #f9a825;
+    --fundo:      #f5f5f0;
+    --texto:      #212121;
+    --radius:     10px;
+}
+
+/* ─── Navbar ──────────────────────────────────────────────────── */
+.bg-desffrut { background-color: var(--verde) !important; }
+
+/* ─── Abas de categoria ───────────────────────────────────────── */
+.categorias-bar {
+    position: sticky;
+    top: 56px;
+    z-index: 100;
+    background: #fff;
+    border-bottom: 2px solid #e8f5e9;
+    padding: 8px 0;
+}
+.btn-categoria {
+    border: none;
+    background: none;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: .9rem;
+    color: #555;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+}
+.btn-categoria.ativa,
+.btn-categoria:hover {
+    background: var(--verde);
+    color: #fff;
+}
+
+/* ─── Cards de produto ────────────────────────────────────────── */
+.produto-card {
+    border-radius: var(--radius);
+    transition: transform .15s, box-shadow .15s;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+}
+.produto-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.1);
+}
+.produto-foto {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background: #f0f4f0;
+}
+.produto-foto-placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #e8f5e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
+.preco-atual { color: var(--verde); font-weight: 700; font-size: 1.2rem; }
+.preco-riscado { text-decoration: line-through; color: #999; font-size: .85rem; }
+.badge-promo {
+    background: var(--amarelo);
+    color: #333;
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.btn-add {
+    background: var(--verde);
+    color: #fff;
+    border: none;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-weight: 600;
+    white-space: nowrap;
+    padding: 6px 10px;
+}
+.btn-add:hover { background: var(--verde-escuro); }
+
+.qtd-input {
+    border-radius: var(--radius) 0 0 var(--radius) !important;
+    border-right: none !important;
+    width: 65px !important;
+    text-align: center;
+}
+
+/* ─── Sacola / Offcanvas ──────────────────────────────────────── */
+#sacolaDrawer { min-width: 340px; }
+
+.sacola-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+.sacola-item-nome { font-weight: 600; font-size: .9rem; }
+.sacola-item-detalhe { font-size: .82rem; color: #666; }
+.sacola-item-qtd { margin-top: 4px; }
+
+/* Botões +/- da sacola */
+.btn-qtd-menos,
+.btn-qtd-mais {
+    padding: 2px 7px;
+    font-size: .85rem;
+    line-height: 1.4;
+}
+.qtd-sacola-input {
+    font-size: .85rem;
+    padding: 2px 4px;
+    min-width: 44px;
+}
+
+.btn-remover {
+    background: none;
+    border: none;
+    color: #e53935;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    align-self: flex-start;
+    margin-top: 2px;
+}
+
+.sacola-total {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--verde);
+}
+
+.btn-finalizar {
+    background: var(--amarelo);
+    color: #333;
+    font-weight: 700;
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: filter .2s;
+}
+.btn-finalizar:hover { filter: brightness(.92); }
+
+/* ─── Estado vazio ────────────────────────────────────────────── */
+.estado-vazio {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+.estado-vazio .icone { font-size: 4rem; margin-bottom: 12px; }
+
+/* ─── Páginas de formulário (login, cadastro) ─────────────────── */
+.form-container {
+    max-width: 480px;
+    margin: 60px auto;
+    padding: 32px;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 2px 16px rgba(0,0,0,.08);
+}
+.form-container h1 { color: var(--verde); margin-bottom: 6px; }
+
+/* ─── Perfil do cliente ───────────────────────────────────────── */
+.pontos-card {
+    background: linear-gradient(135deg, var(--verde), var(--verde-escuro));
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+}
+.pontos-valor { font-size: 3rem; font-weight: 800; }
+.pontos-label { font-size: .9rem; opacity: .85; }
+
+/* ─── Utilitários ─────────────────────────────────────────────── */
+body { background: var(--fundo); color: var(--texto); }
+.text-verde { color: var(--verde) !important; }
+.bg-verde    { background: var(--verde) !important; }

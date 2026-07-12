@@ -1,0 +1,29 @@
+# ─── Credenciais reais do banco (nunca subir para o GitHub) ───────────────────
+app/config/db.credentials.php
+
+# ─── Uploads gerados pelos usuários ───────────────────────────────────────────
+uploads/produtos/*
+uploads/backups/*
+uploads/funcionarios/*
+!uploads/produtos/.gitkeep
+!uploads/backups/.gitkeep
+!uploads/funcionarios/.gitkeep
+
+# ─── Arquivos de sistema operacional ──────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+error_log
+
+# ─── Dependências (caso use Composer futuramente) ─────────────────────────────
+vendor/
+composer.lock
+
+# ─── Arquivos de ambiente e IDEs ──────────────────────────────────────────────
+.env
+.env.local
+.vscode/settings.json
+.idea/
