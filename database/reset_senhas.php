@@ -19,7 +19,7 @@ require_once __DIR__ . '/../app/config/database.php';
 $msg   = '';
 $tipo  = '';
 
-// Reset em massa de todos os usuários de seed
+// Reset em massa de todos os usuários de seed (legado — database/01-seed.sql)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['resetar_todos'])) {
     $seed_users = [
         ['admin@desffrut.com.br',        'admin123'],
@@ -45,6 +45,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['resetar_todos'])) {
             $ok += $stmt->rowCount();
         }
         $msg  = "✅ {$ok} usuário(s) de seed tiveram as senhas resetadas com sucesso.";
+        $tipo = 'ok';
+    } catch (Throwable $ex) {
+        $msg  = 'Erro: ' . htmlspecialchars($ex->getMessage());
+        $tipo = 'erro';
+    }
+
+// Reset em massa dos 14 usuários de teste nomeados (database/seed_teste.sql)
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['resetar_teste'])) {
+    $senha_padrao = '@senha01';
+    $emails_teste = [
+        'roberio.dev@desffrut.com.br',
+        'paulo.dono@desffrut.com.br',
+        'paula.rh@desffrut.com.br',
+        'adriana.gerente@desffrut.com.br',
+        'maria.caixa1@desffrut.com.br',
+        'josi.caixa2@desffrut.com.br',
+        'livia.caixa3@desffrut.com.br',
+        'francisco.entregador@desffrut.com.br',
+        'henrique.motorista@desffrut.com.br',
+        'antonio.auxiliar1@desffrut.com.br',
+        'chagas.auxiliar2@desffrut.com.br',
+        'marcia.cliente@teste.com',
+        'jessica.cliente@teste.com',
+        'costa.cliente@teste.com',
+    ];
+    try {
+        $pdo  = db();
+        $hash = password_hash($senha_padrao, PASSWORD_BCRYPT, ['cost' => 12]);
+        $stmt = $pdo->prepare("UPDATE usuarios SET senha_hash = :h WHERE email = :e");
+        $ok = 0;
+        foreach ($emails_teste as $email) {
+            $stmt->execute([':h' => $hash, ':e' => $email]);
+            $ok += $stmt->rowCount();
+        }
+        $msg  = "✅ {$ok} usuário(s) de teste (seed_teste.sql) tiveram a senha definida para \"@senha01\".";
         $tipo = 'ok';
     } catch (Throwable $ex) {
         $msg  = 'Erro: ' . htmlspecialchars($ex->getMessage());
@@ -164,6 +199,35 @@ $roles = ['dev_admin','super_admin','gerente','caixa','entregador','rh_financeir
         <button type="submit" style="background:#2e7d32;">🌿 Resetar Todos os Seeds</button>
     </form>
     <?php if ($msg && isset($_POST['resetar_todos'])): ?>
+    <div class="<?= $tipo === 'ok' ? 'msg-ok' : 'msg-err' ?>"><?= $msg ?></div>
+    <?php endif; ?>
+</div>
+
+<!-- Reset em massa dos 14 usuários de teste nomeados (database/seed_teste.sql) -->
+<div class="card" style="border-color:#7c3aed;">
+    <strong>🔑 Resetar Senhas de Teste (@senha01)</strong><br>
+    <small style="color:#666;">Define a senha "@senha01" para os 14 usuários nomeados do seed de demonstração (database/seed_teste.sql). Rode isso ANTES de exportar o banco para o servidor de teste — este utilitário só funciona em ambiente local.</small>
+    <form method="POST" style="margin-top:12px;">
+        <input type="hidden" name="resetar_teste" value="1">
+        <table style="font-size:.75rem;color:#888;margin:8px 0;">
+            <tr><td>roberio.dev@desffrut.com.br</td><td style="color:#c4b5fd;">Robério — dev_admin</td></tr>
+            <tr><td>paulo.dono@desffrut.com.br</td><td style="color:#c4b5fd;">Paulo — super_admin</td></tr>
+            <tr><td>paula.rh@desffrut.com.br</td><td style="color:#c4b5fd;">Paula — rh_financeiro</td></tr>
+            <tr><td>adriana.gerente@desffrut.com.br</td><td style="color:#c4b5fd;">Adriana — gerente</td></tr>
+            <tr><td>maria.caixa1@desffrut.com.br</td><td style="color:#c4b5fd;">Maria — caixa (Loja 1)</td></tr>
+            <tr><td>josi.caixa2@desffrut.com.br</td><td style="color:#c4b5fd;">Josi — caixa (Loja 2)</td></tr>
+            <tr><td>livia.caixa3@desffrut.com.br</td><td style="color:#c4b5fd;">Lívia — caixa (Loja 3)</td></tr>
+            <tr><td>francisco.entregador@desffrut.com.br</td><td style="color:#c4b5fd;">Francisco — entregador</td></tr>
+            <tr><td>henrique.motorista@desffrut.com.br</td><td style="color:#c4b5fd;">Henrique — colaborador (motorista)</td></tr>
+            <tr><td>antonio.auxiliar1@desffrut.com.br</td><td style="color:#c4b5fd;">Antônio — colaborador (auxiliar Loja 1)</td></tr>
+            <tr><td>chagas.auxiliar2@desffrut.com.br</td><td style="color:#c4b5fd;">Chagas — colaborador (auxiliar Loja 2)</td></tr>
+            <tr><td>marcia.cliente@teste.com</td><td style="color:#c4b5fd;">Márcia — cliente</td></tr>
+            <tr><td>jessica.cliente@teste.com</td><td style="color:#c4b5fd;">Jessica — cliente</td></tr>
+            <tr><td>costa.cliente@teste.com</td><td style="color:#c4b5fd;">Costa — cliente</td></tr>
+        </table>
+        <button type="submit" style="background:#7c3aed;">🔑 Resetar Senhas de Teste (@senha01)</button>
+    </form>
+    <?php if ($msg && isset($_POST['resetar_teste'])): ?>
     <div class="<?= $tipo === 'ok' ? 'msg-ok' : 'msg-err' ?>"><?= $msg ?></div>
     <?php endif; ?>
 </div>

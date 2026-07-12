@@ -152,11 +152,42 @@ const DesffrHardware = (function () {
     }
 
     /**
+     * Detecta se está rodando dentro do PDV Desktop (app pywebview/.exe).
+     * Quando true, o bridge Python local (app/bridge.py) responde direto
+     * em processo — sem extensão de navegador, sem Native Messaging.
+     */
+    function viaPdvDesktop() {
+        return typeof window !== 'undefined' && !!window.pywebview && !!window.pywebview.api;
+    }
+
+    /**
+     * Canal único de comandos de hardware: usa o bridge do PDV Desktop
+     * quando disponível (mais robusto — em processo, sem extensão) e cai
+     * para a extensão/Native Messaging quando rodando num navegador comum.
+     *
+     * @param {string} cmd     — 'print' | 'list_printers' | 'status'
+     * @param {Object} payload — dados do comando
+     * @returns {Promise<Object>}
+     */
+    async function _enviarComando(cmd, payload = {}) {
+        if (viaPdvDesktop()) {
+            const resp = await window.pywebview.api.hw_comando(cmd, payload);
+            if (!resp || resp.ok === false) {
+                throw new Error(resp?.erro || 'Erro no PDV Desktop.');
+            }
+            return resp.data || {};
+        }
+        return _enviarExtensao(cmd, payload);
+    }
+
+    /**
      * Verifica se a extensão está instalada e respondendo.
-     * Em localhost, ainda verifica — a extensão pode estar instalada.
+     * No PDV Desktop (.exe) não há extensão — o bridge local já resolve,
+     * então este check é considerado satisfeito automaticamente.
      * @returns {Promise<boolean>}
      */
     async function extensaoInstalada() {
+        if (viaPdvDesktop()) return true;
         try {
             const r = await Promise.race([
                 _enviarExtensao('status'),
@@ -235,7 +266,7 @@ const DesffrHardware = (function () {
                 'Acesse Dashboard → Hardware para configurar.'
             );
         }
-        return _enviarExtensao('print', {
+        return _enviarComando('print', {
             tipo: 'cupom',
             impressora: cfg.nome,
             raw,                   // string ESC/POS
@@ -425,7 +456,7 @@ const DesffrHardware = (function () {
         }
 
         if (tipo === 'inkjet') {
-            return _enviarExtensao('print', {
+            return _enviarComando('print', {
                 tipo: 'inkjet',
                 impressora: cfg.nome,
                 html: `<html><body style="font-family:Arial;padding:20px">
@@ -493,7 +524,7 @@ const DesffrHardware = (function () {
     /** Envia TSPL para a impressora de etiqueta. */
     function _enviarTspl(tspl) {
         const cfg = cfgImpressora('etiqueta');
-        return _enviarExtensao('print', {
+        return _enviarComando('print', {
             tipo:       'etiqueta',
             impressora: cfg.nome,
             protocolo:  'tspl',
@@ -618,7 +649,7 @@ const DesffrHardware = (function () {
      */
     async function listarImpressoras() {
         try {
-            const r = await _enviarExtensao('list_printers');
+            const r = await _enviarComando('list_printers');
             return r.impressoras || [];
         } catch (errExt) {
             // Fallback PHP — apenas em localhost quando extensão não está instalada
@@ -633,15 +664,22 @@ const DesffrHardware = (function () {
     }
 
     // ════════════════════════════════════════════════════════════════════════
-    // SEÇÃO 7 — BALANÇA (Web Serial API — mantida)
+    // SEÇÃO 7 — BALANÇA (pyserial nativo no PDV Desktop; Web Serial no browser)
     // ════════════════════════════════════════════════════════════════════════
 
+    /**
+     * No PDV Desktop (.exe) a leitura da balança é feita via pyserial nativo
+     * (app/hardware/balanca.py) — mais confiável que a Web Serial API, que
+     * exige HTTPS, diálogo de permissão por sessão e tem suporte irregular
+     * a drivers USB-serial (Toledo/Filizola).
+     */
     function serialDisponivel() {
-        return !!(navigator.serial);
+        return viaPdvDesktop() || !!(navigator.serial);
     }
 
     async function selecionarPortaBalanca() {
-        if (!serialDisponivel()) {
+        if (viaPdvDesktop()) return null; // seleção de porta não se aplica — resolvida no bridge
+        if (!navigator.serial) {
             throw new Error(
                 'Web Serial API não disponível.\n' +
                 'Use Google Chrome ou Edge com flags habilitadas.'
@@ -652,7 +690,12 @@ const DesffrHardware = (function () {
     }
 
     async function lerPesoBalanca(timeoutMs = 4000) {
-        if (!serialDisponivel()) throw new Error('Web Serial API não disponível neste navegador.');
+        if (viaPdvDesktop()) {
+            const cfg = getConfig();
+            const r = await _enviarComando('balanca_ler', { porta: cfg.balanca?.porta || null });
+            return r.peso ?? 0;
+        }
+        if (!navigator.serial) throw new Error('Web Serial API não disponível neste navegador.');
         if (!_serialPort) await selecionarPortaBalanca();
         if (!_serialPort.readable) {
             await _serialPort.open({ baudRate: 9600, dataBits: 8, stopBits: 1, parity: 'none' });
@@ -794,7 +837,7 @@ const DesffrHardware = (function () {
         const local = isLocal();
 
         const s = {
-            modo:          'native_messaging', // sempre native messaging (extensão)
+            modo:          viaPdvDesktop() ? 'pdv_desktop' : 'native_messaging',
             local,
             serial_api:    serialDisponivel(),
             porta_serial:  !!_serialPort,
@@ -804,23 +847,32 @@ const DesffrHardware = (function () {
             extensao:      null,
         };
 
-        // Verifica extensão com retry — service worker pode demorar para acordar
-        // (PyInstaller .exe leva alguns segundos na primeira execução).
-        // Tenta até 3 vezes com 5s de timeout cada, com 2s de intervalo.
-        s.extensao = await (async () => {
-            for (let tentativa = 1; tentativa <= 3; tentativa++) {
-                try {
-                    const ext = await Promise.race([
-                        _enviarExtensao('status'),
-                        new Promise((_, r) => setTimeout(() => r(new Error('timeout')), 5000)),
-                    ]);
-                    return { instalada: true, ...ext };
-                } catch (_) {
-                    if (tentativa < 3) await new Promise(r => setTimeout(r, 2000));
-                }
+        if (viaPdvDesktop()) {
+            // PDV Desktop: bridge Python local, sem extensão de navegador.
+            try {
+                const r = await _enviarComando('status');
+                s.extensao = { instalada: true, ...r };
+            } catch (e) {
+                s.extensao = { instalada: false, erro: e.message };
             }
-            return { instalada: false, erro: 'Extensão não respondeu. Verifique se está instalada e o host nativo ativo.' };
-        })();
+        } else {
+            // Verifica extensão com retry — service worker pode demorar para acordar.
+            // Tenta até 3 vezes com 5s de timeout cada, com 2s de intervalo.
+            s.extensao = await (async () => {
+                for (let tentativa = 1; tentativa <= 3; tentativa++) {
+                    try {
+                        const ext = await Promise.race([
+                            _enviarExtensao('status'),
+                            new Promise((_, r) => setTimeout(() => r(new Error('timeout')), 5000)),
+                        ]);
+                        return { instalada: true, ...ext };
+                    } catch (_) {
+                        if (tentativa < 3) await new Promise(r => setTimeout(r, 2000));
+                    }
+                }
+                return { instalada: false, erro: 'Extensão não respondeu. Verifique se está instalada e o host nativo ativo.' };
+            })();
+        }
 
         // Listagem de impressoras NÃO é feita automaticamente no status.
         // O usuário aciona manualmente via botão "Detectar" no painel.
@@ -840,6 +892,7 @@ const DesffrHardware = (function () {
     return {
         // Ambiente
         isLocal,
+        viaPdvDesktop,
         // Config
         getConfig,
         setConfig,
