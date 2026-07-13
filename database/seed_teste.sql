@@ -47,20 +47,20 @@ INSERT INTO lojas (nome, endereco, telefone, horario_funcionamento, whatsapp_lin
 -- id 13 Jessica   — Cliente                → cliente
 -- id 14 Costa     — Cliente                → cliente
 INSERT INTO usuarios (nome, email, cpf, telefone, whatsapp, senha_hash, role, loja_id, lgpd_aceito_em) VALUES
-('Robério',   'roberio.dev@desffrut.com.br',       '100.100.100-01', '(85) 99999-0001', '(85) 99999-0001', 'HASH_PENDENTE', 'dev_admin',     NULL, NOW()),
-('Paulo',     'paulo.dono@desffrut.com.br',        '100.100.100-02', '(85) 99999-0002', '(85) 99999-0002', 'HASH_PENDENTE', 'super_admin',   NULL, NOW()),
-('Paula',     'paula.rh@desffrut.com.br',          '100.100.100-03', '(85) 99999-0003', '(85) 99999-0003', 'HASH_PENDENTE', 'rh_financeiro', NULL, NOW()),
-('Adriana',   'adriana.gerente@desffrut.com.br',   '100.100.100-04', '(85) 99999-0004', '(85) 99999-0004', 'HASH_PENDENTE', 'gerente',       NULL, NOW()),
-('Maria',     'maria.caixa1@desffrut.com.br',      '100.100.100-05', '(85) 99999-0005', '(85) 99999-0005', 'HASH_PENDENTE', 'caixa',         1,    NOW()),
-('Josi',      'josi.caixa2@desffrut.com.br',       '100.100.100-06', '(85) 99999-0006', '(85) 99999-0006', 'HASH_PENDENTE', 'caixa',         2,    NOW()),
-('Lívia',     'livia.caixa3@desffrut.com.br',      '100.100.100-07', '(85) 99999-0007', '(85) 99999-0007', 'HASH_PENDENTE', 'caixa',         3,    NOW()),
-('Francisco', 'francisco.entregador@desffrut.com.br','100.100.100-08','(85) 99999-0008', '(85) 99999-0008', 'HASH_PENDENTE', 'entregador',    3,    NOW()),
-('Henrique',  'henrique.motorista@desffrut.com.br',  '100.100.100-09','(85) 99999-0009', '(85) 99999-0009', 'HASH_PENDENTE', 'colaborador',   1,    NOW()),
-('Antônio',   'antonio.auxiliar1@desffrut.com.br',   '100.100.100-10','(85) 99999-0010', '(85) 99999-0010', 'HASH_PENDENTE', 'colaborador',   1,    NOW()),
-('Chagas',    'chagas.auxiliar2@desffrut.com.br',    '100.100.100-11','(85) 99999-0011', '(85) 99999-0011', 'HASH_PENDENTE', 'colaborador',   2,    NOW()),
-('Márcia',    'marcia.cliente@teste.com',            '100.100.100-12', NULL,             NULL,              'HASH_PENDENTE', 'cliente',       NULL, NOW()),
-('Jessica',   'jessica.cliente@teste.com',           '100.100.100-13', NULL,             NULL,              'HASH_PENDENTE', 'cliente',       NULL, NOW()),
-('Costa',     'costa.cliente@teste.com',             '100.100.100-14', NULL,             NULL,              'HASH_PENDENTE', 'cliente',       NULL, NOW());
+('Robério',   'roberio@desffrut.com.br',   '100.100.100-01', '(85) 99999-0001', '(85) 99999-0001', 'HASH_PENDENTE', 'dev_admin',     NULL, NOW()),
+('Paulo',     'paulo@desffrut.com.br',     '100.100.100-02', '(85) 99999-0002', '(85) 99999-0002', 'HASH_PENDENTE', 'super_admin',   NULL, NOW()),
+('Paula',     'paula@desffrut.com.br',     '100.100.100-03', '(85) 99999-0003', '(85) 99999-0003', 'HASH_PENDENTE', 'rh_financeiro', NULL, NOW()),
+('Adriana',   'adriana@desffrut.com.br',   '100.100.100-04', '(85) 99999-0004', '(85) 99999-0004', 'HASH_PENDENTE', 'gerente',       NULL, NOW()),
+('Maria',     'maria@desffrut.com.br',     '100.100.100-05', '(85) 99999-0005', '(85) 99999-0005', 'HASH_PENDENTE', 'caixa',         1,    NOW()),
+('Josi',      'josi@desffrut.com.br',      '100.100.100-06', '(85) 99999-0006', '(85) 99999-0006', 'HASH_PENDENTE', 'caixa',         2,    NOW()),
+('Lívia',     'livia@desffrut.com.br',     '100.100.100-07', '(85) 99999-0007', '(85) 99999-0007', 'HASH_PENDENTE', 'caixa',         3,    NOW()),
+('Francisco', 'francisco@desffrut.com.br', '100.100.100-08', '(85) 99999-0008', '(85) 99999-0008', 'HASH_PENDENTE', 'entregador',    3,    NOW()),
+('Henrique',  'henrique@desffrut.com.br',  '100.100.100-09', '(85) 99999-0009', '(85) 99999-0009', 'HASH_PENDENTE', 'colaborador',   1,    NOW()),
+('Antônio',   'antonio@desffrut.com.br',   '100.100.100-10', '(85) 99999-0010', '(85) 99999-0010', 'HASH_PENDENTE', 'colaborador',   1,    NOW()),
+('Chagas',    'chagas@desffrut.com.br',    '100.100.100-11', '(85) 99999-0011', '(85) 99999-0011', 'HASH_PENDENTE', 'colaborador',   2,    NOW()),
+('Márcia',    'marcia@teste.com',          '100.100.100-12', NULL,              NULL,              'HASH_PENDENTE', 'cliente',       NULL, NOW()),
+('Jessica',   'jessica@teste.com',         '100.100.100-13', NULL,              NULL,              'HASH_PENDENTE', 'cliente',       NULL, NOW()),
+('Costa',     'costa@teste.com',           '100.100.100-14', NULL,              NULL,              'HASH_PENDENTE', 'cliente',       NULL, NOW());
 
 -- ─── Fichas de funcionário (RH) — não inclui Robério/Paulo (dev/dono) ───────
 -- Assume que os 14 usuários acima foram inseridos com id 1-14, nesta ordem

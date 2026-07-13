@@ -19,20 +19,20 @@
 
 | Nome | E-mail | Senha | Nível de acesso (role) | Loja |
 |------|--------|-------|------------------------|------|
-| Robério   | roberio.dev@desffrut.com.br         | @senha01 | `dev_admin` — painel `/dev`, tudo liberado | — |
-| Paulo     | paulo.dono@desffrut.com.br          | @senha01 | `super_admin` — dono, acesso total a todas as lojas | — |
-| Paula     | paula.rh@desffrut.com.br            | @senha01 | `rh_financeiro` — RH, ponto, folha, financeiro (multi-loja) | — |
-| Adriana   | adriana.gerente@desffrut.com.br     | @senha01 | `gerente` — produtos, estoque, pedidos, CEASA, hardware, CRM, BI (todas as lojas) | — |
-| Maria     | maria.caixa1@desffrut.com.br        | @senha01 | `caixa` — PDV, pedidos, sacola | Loja 1 |
-| Josi      | josi.caixa2@desffrut.com.br         | @senha01 | `caixa` — PDV, pedidos, sacola | Loja 2 |
-| Lívia     | livia.caixa3@desffrut.com.br        | @senha01 | `caixa` — PDV, pedidos, sacola | Loja 3 |
-| Francisco | francisco.entregador@desffrut.com.br| @senha01 | `entregador` — pedidos em rota | Loja 3 (delivery) |
-| Henrique  | henrique.motorista@desffrut.com.br  | @senha01 | `colaborador` — motorista CEASA, sem acesso ao painel | Loja 1 |
-| Antônio   | antonio.auxiliar1@desffrut.com.br   | @senha01 | `colaborador` — auxiliar CEASA, sem acesso ao painel | Loja 1 |
-| Chagas    | chagas.auxiliar2@desffrut.com.br    | @senha01 | `colaborador` — auxiliar CEASA, sem acesso ao painel | Loja 2 |
-| Márcia    | marcia.cliente@teste.com            | @senha01 | `cliente` — catálogo, checkout, perfil | — |
-| Jessica   | jessica.cliente@teste.com           | @senha01 | `cliente` — catálogo, checkout, perfil | — |
-| Costa     | costa.cliente@teste.com             | @senha01 | `cliente` — catálogo, checkout, perfil | — |
+| Robério   | roberio@desffrut.com.br   | @senha01 | `dev_admin` — painel `/dev`, tudo liberado | — |
+| Paulo     | paulo@desffrut.com.br     | @senha01 | `super_admin` — dono, acesso total a todas as lojas | — |
+| Paula     | paula@desffrut.com.br     | @senha01 | `rh_financeiro` — RH, ponto, folha, financeiro (multi-loja) | — |
+| Adriana   | adriana@desffrut.com.br   | @senha01 | `gerente` — produtos, estoque, pedidos, CEASA, hardware, CRM, BI (todas as lojas) | — |
+| Maria     | maria@desffrut.com.br     | @senha01 | `caixa` — PDV, pedidos, sacola | Loja 1 |
+| Josi      | josi@desffrut.com.br      | @senha01 | `caixa` — PDV, pedidos, sacola | Loja 2 |
+| Lívia     | livia@desffrut.com.br     | @senha01 | `caixa` — PDV, pedidos, sacola | Loja 3 |
+| Francisco | francisco@desffrut.com.br | @senha01 | `entregador` — pedidos em rota | Loja 3 (delivery) |
+| Henrique  | henrique@desffrut.com.br  | @senha01 | `colaborador` — motorista CEASA, sem acesso ao painel | Loja 1 |
+| Antônio   | antonio@desffrut.com.br   | @senha01 | `colaborador` — auxiliar CEASA, sem acesso ao painel | Loja 1 |
+| Chagas    | chagas@desffrut.com.br    | @senha01 | `colaborador` — auxiliar CEASA, sem acesso ao painel | Loja 2 |
+| Márcia    | marcia@teste.com          | @senha01 | `cliente` — catálogo, checkout, perfil | — |
+| Jessica   | jessica@teste.com         | @senha01 | `cliente` — catálogo, checkout, perfil | — |
+| Costa     | costa@teste.com           | @senha01 | `cliente` — catálogo, checkout, perfil | — |
 
 Também populados por `seed_teste.sql`: 3 lojas (Loja 1/2/3), fichas de RH para os 9 usuários operacionais (Paula, Adriana, Maria, Josi, Lívia, Francisco, Henrique, Antônio, Chagas), 3 colaboradores no módulo CEASA (Henrique/Antônio/Chagas) e 28 produtos (com preço e estoque nas 3 lojas) a partir das imagens em `uploads/produtos/`.
 

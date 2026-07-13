@@ -55,20 +55,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['resetar_todos'])) {
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['resetar_teste'])) {
     $senha_padrao = '@senha01';
     $emails_teste = [
-        'roberio.dev@desffrut.com.br',
-        'paulo.dono@desffrut.com.br',
-        'paula.rh@desffrut.com.br',
-        'adriana.gerente@desffrut.com.br',
-        'maria.caixa1@desffrut.com.br',
-        'josi.caixa2@desffrut.com.br',
-        'livia.caixa3@desffrut.com.br',
-        'francisco.entregador@desffrut.com.br',
-        'henrique.motorista@desffrut.com.br',
-        'antonio.auxiliar1@desffrut.com.br',
-        'chagas.auxiliar2@desffrut.com.br',
-        'marcia.cliente@teste.com',
-        'jessica.cliente@teste.com',
-        'costa.cliente@teste.com',
+        'roberio@desffrut.com.br',
+        'paulo@desffrut.com.br',
+        'paula@desffrut.com.br',
+        'adriana@desffrut.com.br',
+        'maria@desffrut.com.br',
+        'josi@desffrut.com.br',
+        'livia@desffrut.com.br',
+        'francisco@desffrut.com.br',
+        'henrique@desffrut.com.br',
+        'antonio@desffrut.com.br',
+        'chagas@desffrut.com.br',
+        'marcia@teste.com',
+        'jessica@teste.com',
+        'costa@teste.com',
     ];
     try {
         $pdo  = db();
@@ -210,20 +210,20 @@ $roles = ['dev_admin','super_admin','gerente','caixa','entregador','rh_financeir
     <form method="POST" style="margin-top:12px;">
         <input type="hidden" name="resetar_teste" value="1">
         <table style="font-size:.75rem;color:#888;margin:8px 0;">
-            <tr><td>roberio.dev@desffrut.com.br</td><td style="color:#c4b5fd;">Robério — dev_admin</td></tr>
-            <tr><td>paulo.dono@desffrut.com.br</td><td style="color:#c4b5fd;">Paulo — super_admin</td></tr>
-            <tr><td>paula.rh@desffrut.com.br</td><td style="color:#c4b5fd;">Paula — rh_financeiro</td></tr>
-            <tr><td>adriana.gerente@desffrut.com.br</td><td style="color:#c4b5fd;">Adriana — gerente</td></tr>
-            <tr><td>maria.caixa1@desffrut.com.br</td><td style="color:#c4b5fd;">Maria — caixa (Loja 1)</td></tr>
-            <tr><td>josi.caixa2@desffrut.com.br</td><td style="color:#c4b5fd;">Josi — caixa (Loja 2)</td></tr>
-            <tr><td>livia.caixa3@desffrut.com.br</td><td style="color:#c4b5fd;">Lívia — caixa (Loja 3)</td></tr>
-            <tr><td>francisco.entregador@desffrut.com.br</td><td style="color:#c4b5fd;">Francisco — entregador</td></tr>
-            <tr><td>henrique.motorista@desffrut.com.br</td><td style="color:#c4b5fd;">Henrique — colaborador (motorista)</td></tr>
-            <tr><td>antonio.auxiliar1@desffrut.com.br</td><td style="color:#c4b5fd;">Antônio — colaborador (auxiliar Loja 1)</td></tr>
-            <tr><td>chagas.auxiliar2@desffrut.com.br</td><td style="color:#c4b5fd;">Chagas — colaborador (auxiliar Loja 2)</td></tr>
-            <tr><td>marcia.cliente@teste.com</td><td style="color:#c4b5fd;">Márcia — cliente</td></tr>
-            <tr><td>jessica.cliente@teste.com</td><td style="color:#c4b5fd;">Jessica — cliente</td></tr>
-            <tr><td>costa.cliente@teste.com</td><td style="color:#c4b5fd;">Costa — cliente</td></tr>
+            <tr><td>roberio@desffrut.com.br</td><td style="color:#c4b5fd;">Robério — dev_admin</td></tr>
+            <tr><td>paulo@desffrut.com.br</td><td style="color:#c4b5fd;">Paulo — super_admin</td></tr>
+            <tr><td>paula@desffrut.com.br</td><td style="color:#c4b5fd;">Paula — rh_financeiro</td></tr>
+            <tr><td>adriana@desffrut.com.br</td><td style="color:#c4b5fd;">Adriana — gerente</td></tr>
+            <tr><td>maria@desffrut.com.br</td><td style="color:#c4b5fd;">Maria — caixa (Loja 1)</td></tr>
+            <tr><td>josi@desffrut.com.br</td><td style="color:#c4b5fd;">Josi — caixa (Loja 2)</td></tr>
+            <tr><td>livia@desffrut.com.br</td><td style="color:#c4b5fd;">Lívia — caixa (Loja 3)</td></tr>
+            <tr><td>francisco@desffrut.com.br</td><td style="color:#c4b5fd;">Francisco — entregador</td></tr>
+            <tr><td>henrique@desffrut.com.br</td><td style="color:#c4b5fd;">Henrique — colaborador (motorista)</td></tr>
+            <tr><td>antonio@desffrut.com.br</td><td style="color:#c4b5fd;">Antônio — colaborador (auxiliar Loja 1)</td></tr>
+            <tr><td>chagas@desffrut.com.br</td><td style="color:#c4b5fd;">Chagas — colaborador (auxiliar Loja 2)</td></tr>
+            <tr><td>marcia@teste.com</td><td style="color:#c4b5fd;">Márcia — cliente</td></tr>
+            <tr><td>jessica@teste.com</td><td style="color:#c4b5fd;">Jessica — cliente</td></tr>
+            <tr><td>costa@teste.com</td><td style="color:#c4b5fd;">Costa — cliente</td></tr>
         </table>
         <button type="submit" style="background:#7c3aed;">🔑 Resetar Senhas de Teste (@senha01)</button>
     </form>

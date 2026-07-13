@@ -13,6 +13,12 @@ RewriteEngine On
 # RewriteCond %{HTTPS} off
 # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# ─── Exceção: utilitário de reset de senha de teste (dev only) ────────────────
+# Precisa ser acessível pelo navegador em localhost. Já é protegido por dentro
+# (database/reset_senhas.php verifica AMBIENTE === 'local' e recusa com 403
+# em qualquer outro ambiente), então liberar a URL aqui é seguro.
+RewriteRule ^database/reset_senhas\.php$ - [L]
+
 # ─── Proteção: bloquear acesso direto a diretórios internos ───────────────────
 RewriteRule ^(app|briefings|database)(\/|$) - [F,L]
 
